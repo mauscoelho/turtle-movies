@@ -1,6 +1,7 @@
 import React from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
+import { Text, View, FlatList, TouchableOpacity } from "react-native";
 import { gql, useQuery } from "@apollo/client";
+import { useNavigation } from "@react-navigation/native";
 
 const QUERY_MOVIES = gql`
   query GetMovies {
@@ -22,21 +23,27 @@ interface QueryMovies {
   movies: Movie[];
 }
 
-export default function Home() {
+export default function HomeScreen() {
   const { loading, error, data } = useQuery<QueryMovies>(QUERY_MOVIES);
+  const navigation = useNavigation();
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error :(</Text>;
 
+  function onPressItem(movie: Movie) {
+    navigation.navigate("Comments", { title: movie.title });
+  }
+
   const renderItem = ({ item }: { item: Movie }) => (
-    <View style={{ marginTop: 5, marginBottom: 5 }}>
-      <Text>{`${item.title} (${item.year})`}</Text>
-    </View>
+    <TouchableOpacity onPress={() => onPressItem(item)}>
+      <View style={{ marginTop: 10, marginBottom: 10 }}>
+        <Text style={{ fontSize: 20 }}>{`${item.title} (${item.year})`}</Text>
+      </View>
+    </TouchableOpacity>
   );
 
   return (
-    <View style={{ margin: 15 }}>
-      <Text style={{ fontSize: 30, marginBottom: 10 }}>My Movies</Text>
+    <View style={{ marginLeft: 10, marginRight: 10 }}>
       <FlatList
         data={data?.movies}
         renderItem={renderItem}

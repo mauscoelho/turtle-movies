@@ -1,24 +1,26 @@
 import React from "react";
-import Home from "./src/Home";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 import ApolloProvider from "./src/ApolloProvider";
-import { StyleSheet, View } from "react-native";
+import HomeScreen from "./src/HomeScreen";
+import CommentsScreen from "./src/CommentsScreen";
+
+export type RootStackParamList = {
+  Movies: undefined;
+  Comments: { title: string };
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
   return (
     <ApolloProvider>
-      <View style={styles.center}>
-        <Home />
-      </View>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Movies" component={HomeScreen} />
+          <Stack.Screen name="Comments" component={CommentsScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </ApolloProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  center: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-    marginTop: 40,
-  },
-});
