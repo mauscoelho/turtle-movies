@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Text, View } from "react-native";
+import React, { useState } from "react";
+import { Text, View, TextInput, Button } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { RootStackParamList } from "../App";
 import { RouteProp } from "@react-navigation/native";
 import { collection, add, subcollection, Ref } from "typesaurus";
@@ -16,18 +17,42 @@ type Comment = {
 };
 
 export default function CommentsScreen(props: Props) {
+  const [text, onChangeText] = useState<string>();
+
   const title = `${props.route.params.title} - (${props.route.params.year})`;
   const key = `comments-${encodeURI(title)}`;
   const commentsRef = collection<Comment>(key);
-
   const allComments = useAll(commentsRef);
 
+  function onPressSend() {
+    if (text) {
+      add(commentsRef, { text });
+      onChangeText("");
+    }
+  }
+
   return (
-    <View style={{ margin: 10 }}>
-      <Text style={{ fontSize: 20 }}>{title}</Text>
-      {allComments?.map((comment, index) => (
-        <Text key={index}>{comment.data.text}</Text>
-      ))}
-    </View>
+    <KeyboardAwareScrollView contentContainerStyle={{ flex: 1, margin: 10 }}>
+      <View style={{ flex: 1 }}>
+        <Text style={{ fontSize: 20 }}>{title}</Text>
+        {allComments?.map((comment, index) => (
+          <Text key={index}>{comment.data.text}</Text>
+        ))}
+      </View>
+      <View style={{ flexDirection: "row" }}>
+        <TextInput
+          style={{
+            height: 40,
+            flex: 1,
+          }}
+          onChangeText={(text) => onChangeText(text)}
+          value={text}
+          placeholder="Write comment"
+          returnKeyType="send"
+          onSubmitEditing={onPressSend}
+        ></TextInput>
+        <Button title="Send" onPress={onPressSend}></Button>
+      </View>
+    </KeyboardAwareScrollView>
   );
 }
