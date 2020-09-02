@@ -31,7 +31,7 @@ export default function HomeScreen() {
   if (error) return <Text>Error :(</Text>;
 
   function onPressItem(movie: Movie) {
-    navigation.navigate("Comments", { title: movie.title });
+    navigation.navigate("Comments", { title: movie.title, year: movie.year });
   }
 
   const renderItem = ({ item }: { item: Movie }) => (
