@@ -6,6 +6,7 @@ import "firebase/firestore";
 import ApolloProvider from "./src/ApolloProvider";
 import HomeScreen from "./src/HomeScreen";
 import CommentsScreen from "./src/CommentsScreen";
+import { Colors } from "./src/constants";
 
 // TODO: make it safe
 const firebaseConfig = {
@@ -27,13 +28,29 @@ export type RootStackParamList = {
 
 const Stack = createStackNavigator<RootStackParamList>();
 
+const headerOptions = {
+  headerStyle: {
+    backgroundColor: Colors.background,
+    shadowColor: "transparent",
+  },
+  headerTintColor: Colors.white,
+};
+
 export default function App() {
   return (
     <ApolloProvider>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Movies" component={HomeScreen} />
-          <Stack.Screen name="Comments" component={CommentsScreen} />
+          <Stack.Screen
+            name="Movies"
+            component={HomeScreen}
+            options={headerOptions}
+          />
+          <Stack.Screen
+            name="Comments"
+            component={CommentsScreen}
+            options={headerOptions}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </ApolloProvider>

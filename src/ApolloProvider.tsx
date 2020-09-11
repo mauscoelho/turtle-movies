@@ -15,6 +15,9 @@ const typeDefs = gql`
     description: String
     title: String
     year: String
+    runtime: String
+    rating: String
+    votes: String
   }
 
   type Query {
