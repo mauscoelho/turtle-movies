@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import ApolloProvider from "./src/ApolloProvider";
-import HomeScreen from "./src/HomeScreen";
+import HomeScreen, { Movie } from "./src/HomeScreen";
 import CommentsScreen from "./src/CommentsScreen";
 import { Colors } from "./src/constants";
 
@@ -23,7 +23,7 @@ firebase.initializeApp(firebaseConfig);
 
 export type RootStackParamList = {
   Movies: undefined;
-  Comments: { title: string; year: string };
+  Comments: { movie: Movie };
 };
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -49,7 +49,10 @@ export default function App() {
           <Stack.Screen
             name="Comments"
             component={CommentsScreen}
-            options={headerOptions}
+            options={({ route }) => ({
+              title: route.params.movie.title,
+              ...headerOptions,
+            })}
           />
         </Stack.Navigator>
       </NavigationContainer>

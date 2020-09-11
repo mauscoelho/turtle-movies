@@ -12,7 +12,9 @@ export function MovieItem({ movie }: Props) {
   const navigation = useNavigation();
 
   function onPressItem() {
-    navigation.navigate("Comments", { title: movie.title, year: movie.year });
+    navigation.navigate("Comments", {
+      movie,
+    });
   }
 
   return (
@@ -26,7 +28,7 @@ export function MovieItem({ movie }: Props) {
           <Text style={styles.title}>{movie.title}</Text>
           <Text
             style={styles.subTitle}
-          >{`⏳ ${movie.runtime}min 👍 ${movie.votes}`}</Text>
+          >{`⏳ ${movie.runtime}min ♥️ ${movie.votes}`}</Text>
           <Text
             numberOfLines={1}
             ellipsizeMode="tail"
